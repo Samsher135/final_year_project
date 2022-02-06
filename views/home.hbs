@@ -15,7 +15,8 @@
   </div>
 </main>
 <script>
-let lat2,lon2,old_device;
+let lat2,lon2;
+let old_device = [];
 
 function showPosition(position) {
   lat2 = position.coords.latitude;
@@ -31,14 +32,16 @@ $(document).ready(function(){
       lat2: lat2,
       lon2: lon2
     },
-    function(data,status,num){
+    function(data,status,num){    
     console.log(data.range,"muu");
     console.log(data.device_name);
     console.log(num.status,"statuss");    
-    console.log(data.range=="inrange",old_device!=data.device_name);
-    console.log(data.range=="inrange" && old_device!=data.device_name);
-      if(num.status==200 && data.range=="inrange" && old_device!=data.device_name){
-          old_device = data.device_name;
+    console.log(data.range=="inrange",old_device.indexOf(data.device_name)== (-1));
+    console.log(data.range=="inrange" && old_device.indexOf(data.device_name)== (-1));
+      if(num.status==200 && data.range=="inrange" && old_device.indexOf(data.device_name)== (-1) ){
+          if (old_device.indexOf(data.device_name) === -1) {
+            old_device.push(data.device_name);
+          }
           let variable = '' + 
             '<div class="col">' + 
             '      <div class="card">' + 
