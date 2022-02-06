@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Project testing</title>
+</head>
+<body>
+<main>
+  <div id="divs" style="background: rgba(0,0,0,.5);" class="row row-cols-lg-4 g-2">
+  </div>
+</main>
+<script>
+let lat2,lon2,old_device;
+
+function showPosition(position) {
+  lat2 = position.coords.latitude;
+  lon2 = position.coords.longitude;
+}
+
+$(document).ready(function(){
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+    setInterval(function(){
+    $.post("/new_card",
+    {
+      lat2: 19.218555,
+      lon2: 73.1514911
+    },
+    function(data,status,num){
+    console.log(data.range,"muu");
+    console.log(data.device_name);
+    console.log(num.status,"statuss");    
+    console.log(data.range=="inrange",old_device!=data.device_name);
+    console.log(data.range=="inrange" && old_device!=data.device_name);
+      if(num.status==200 && data.range=="inrange" && old_device!=data.device_name){
+          old_device = data.device_name;
+          let variable = '' + 
+            '<div class="col">' + 
+            '      <div class="card">' + 
+            '        <a class="card-item-link" href="#">' + 
+            '          <img class="card-img-top img-fluid" src="images/Ebike.png" alt="" aria-labelledby="title_1" width="270" height="200">' + 
+            '        </a>' + 
+            '        <div class="card-body">' + 
+            '          <div class="card-item-header">' + 
+            '            <p class="card-item-code">test_item_code123</p>' + 
+            '            <div class="rate">' + 
+            '              <p class="card-item-rating">' + 
+            '                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt=""> <b>4.9</b>' + 
+            '              </p>' + 
+            '              <a class="card-item-code link" href="#">test_item_code123</a>' + 
+            '            </div>' + 
+            '          </div>' + 
+            `          <p id="title_1">${data.device_name}</p>` + 
+            `          <p id="title_1">Battery level: ${data.battery_level}</p>` + 
+            `          <p id="title_1">Range Available: ${data.range_available}</p>` + 
+            '          <div class="card-item-footer">' + 
+            '            <p class="card-item-price">30 Rs/travel</p>' + 
+            '            <div class="b1">' + 
+            `                <button style="padding: 10px;" class="glow-on-hover"  id="view_location" onclick="window.open(\'https://www.google.com/maps/search/?api=1&query=${data.lati},${data.long}\',\'_blank\')" type="button">View Location</button>` + 
+            '            </div>' + 
+            '          </div>' + 
+            '        </div>' + 
+            '      </div>' + 
+            '    </div>' + 
+            '';
+            const element = document.getElementById("divs");
+            document.getElementById("divs").innerHTML += variable;
+          
+      }else{
+          console.log(status,"fucked");
+      }  
+    });
+    }, 3000);
+  }else{
+      console.log("Geolocation is not supported by this browser.");
+  }
+});
+</script>
+</body>
+</html>
