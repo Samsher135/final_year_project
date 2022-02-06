@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 
 let lat,lng,battery_level,range_available,device_name;
 
-app.post('/', (req, res)=>{
+app.post('/update', (req, res)=>{
     console.log(req.body.lat);
     lat = req.body.lat;
     lng = req.body.lng;
@@ -47,7 +47,7 @@ app.post('/new_card', (req, res)=>{
     }
 })
 
-app.get('/display', (req, res)=>{
+app.get('/', (req, res)=>{
     res.render('home');
 })
 

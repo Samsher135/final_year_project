@@ -28,8 +28,8 @@ $(document).ready(function(){
     setInterval(function(){
     $.post("/new_card",
     {
-      lat2: 19.218555,
-      lon2: 73.1514911
+      lat2: lat2,
+      lon2: lon2
     },
     function(data,status,num){
     console.log(data.range,"muu");
