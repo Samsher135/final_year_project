@@ -37,7 +37,7 @@ app.post('/new_card', (req, res)=>{
     const d = R * c; // in metres
     const km = d*(Math.pow(10,-3));
     console.log(km);
-    if(km<10){
+    if(km<100){
         res.status(200).send({range:"inrange",lati:lat1,long:lon1,battery_level:battery_level,range_available:range_available,device_name:device_name});
     }else{
         res.status(200).send({range:"outrange"});
