@@ -8,32 +8,32 @@ app.set('view engine', 'hbs')
 app.use(express.static('public')); 
 app.use(express.urlencoded({ extended: true }));
 
-let lat,lng,battery_level,range_available,device_name,bat_percentage;
+let lat,lng,battery_level_Pb_acid,battery_level_Li_ion,range_available,device_name;
 
-function calc_range(battery_level) {
+function calc_range(battery_level_Li_ion,battery_level_Pb_acid) {
     let range;
-    if (battery_level >= 90 && battery_level <= 100) {
+    if (battery_level_Li_ion >= 20 && battery_level_Pb_acid >= 90 && battery_level_Pb_acid <= 100) {
         range = "10km";
     }
-    else if (battery_level >= 80 && battery_level <= 89) {
+    else if (battery_level_Li_ion >= 20 && battery_level_Pb_acid >= 80 && battery_level_Pb_acid <= 89) {
         range = "9km";
     }
-    else if (battery_level >= 70 && battery_level <= 79) {
+    else if (battery_level_Li_ion >= 20 && battery_level_Pb_acid >= 70 && battery_level_Pb_acid <= 79) {
         range = "8km";
     }
-    else if (battery_level >= 60 && battery_level <= 69) {
+    else if (battery_level_Li_ion >= 20 && battery_level_Pb_acid >= 60 && battery_level_Pb_acid <= 69) {
         range = "7km";
     }
-    else if (battery_level >= 50 && battery_level <= 59) {
+    else if (battery_level_Li_ion >= 20 && battery_level_Pb_acid >= 50 && battery_level_Pb_acid <= 59) {
         range = "6km";
     }
-    else if (battery_level >= 40 && battery_level <= 49) {
+    else if (battery_level_Li_ion >= 20 && battery_level_Pb_acid >= 40 && battery_level_Pb_acid <= 49) {
         range = "5km";
     }
-    else if (battery_level >= 30 && battery_level <= 39) {
+    else if (battery_level_Li_ion >= 20 && battery_level_Pb_acid >= 30 && battery_level_Pb_acid <= 39) {
         range = "4km";
     }
-    else if (battery_level >= 20 && battery_level <= 29) {
+    else if (battery_level_Li_ion >= 20 && battery_level_Pb_acid >= 20 && battery_level_Pb_acid <= 29) {
         range = "3km";
     }
     else{
@@ -47,8 +47,9 @@ app.post('/update', (req, res)=>{
     lat = req.body.lat;
     lng = req.body.lng;
     device_name = req.body.device;
-    battery_level = req.body.bat_percentage;
-    range_available = calc_range(parseInt(battery_level));
+    battery_level_Li_ion = req.body.bat_percentage_Li_ion;
+    battery_level_Pb_acid = req.body.bat_percentage_Pb_acid;
+    range_available = calc_range(parseInt(battery_level_Li_ion),parseInt(battery_level_Pb_acid));
     res.status(200).send("Success");         
 });
 
@@ -70,7 +71,7 @@ app.post('/new_card', (req, res)=>{
     const km = d*(Math.pow(10,-3));
     console.log(km);
     if(km<100){
-        res.status(200).send({range:"inrange",lati:lat1,long:lon1,battery_level:battery_level,range_available:range_available,device_name:device_name,bat_percentage:bat_percentage});
+        res.status(200).send({range:"inrange",lati:lat1,long:lon1,battery_level_Li_ion:battery_level_Li_ion,battery_level_Pb_acid:battery_level_Pb_acid,range_available:range_available,device_name:device_name});
     }else{
         res.status(200).send({range:"outrange"});
     }
